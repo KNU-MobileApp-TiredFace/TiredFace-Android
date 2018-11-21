@@ -13,12 +13,14 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.thirty.tiredfaceapp.JsonDataSender.JsonDataSender;
+import com.example.thirty.tiredfaceapp.JsonObjectEventObserver.JsonObjectEventObserver;
 import com.example.thirty.tiredfaceapp.JsonSerializable.ImageSendingMessage;
 import com.example.thirty.tiredfaceapp.JsonSerializable.ToJsonSerializable;
 import com.example.thirty.tiredfaceapp.UriToByteArrString.ImageUriToBase64ByteArrString;
 import com.example.thirty.tiredfaceapp.UriToByteArrString.UriToByteArrString;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,7 +32,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements JsonObjectEventObserver {
     private JsonDataSender jsonDataSender;
     private UriToByteArrString uriToByteArrString;
     private final static int PICK_IMAGE = 1;
@@ -53,8 +55,15 @@ public class MainActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_CONNECT, onConnect);
         mSocket.connect();
         jsonDataSender = new SocketWriter(mSocket, "message");
+        SocketReceiver socketReceiver = new SocketReceiver(mSocket,null);
+        socketReceiver.registerObserver((JsonObjectEventObserver) this);
 
         uriToByteArrString = new ImageUriToBase64ByteArrString(getContentResolver());
+    }
+
+    @Override
+    public void update(JSONObject jsonObject) {
+        Log.i("DevelopLog","message received : " + jsonObject);
     }
 
     @Override
