@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+//서버에게 보내는 이미지 메시지
 public class ImageSendingMessage implements ToJsonSerializable {
     private int msgId;
     private String encodedImage;
@@ -31,6 +32,15 @@ public class ImageSendingMessage implements ToJsonSerializable {
         }
 
         return jsonObject;
+    }
+
+    public String toJsonString(){
+        String jsonStr = "{";
+        jsonStr += "\"msgId\":\"" + msgId + "\",";
+        jsonStr += "\"encodedType\":\"" + encodingType + "\",";
+        jsonStr += "\"image\":\"" + encodedImage + "\"";
+        jsonStr += "}";
+        return jsonStr;
     }
 
     public ArrayList<JSONObject> toJsonArr(){
