@@ -15,14 +15,18 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.thirty.tiredface.ImageBitmapUriConvert.BitmapToByteStringBase64;
+import com.example.thirty.tiredface.ImageBitmapUriConvert.ImageToGallery;
 import com.example.thirty.tiredface.ImageBitmapUriConvert.ImageUriConverter;
 import com.example.thirty.tiredface.ImageBitmapUriConvert.UriToByteArrString;
 import com.example.thirty.tiredface.JsonDataProcessor.JsonObjectEventObserver.JsonObjectEventObserver;
+import com.example.thirty.tiredface.JsonDataProcessor.TCPSocket.TCPJsonSocketReceiver;
+import com.example.thirty.tiredface.JsonDataProcessor.TCPSocket.TCPSocketCreator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.Socket;
 
 
 public class MainActivity extends AppCompatActivity implements JsonObjectEventObserver {
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
         setContentView(R.layout.activity_main);
 
         /*******************************테스트 코드*******************************/
-/*
+
         try {
             TCPSocketCreator testCreator = new TCPSocketCreator(Settings.SERVER_IP, Settings.SERVER_PORT);
             Socket socket = testCreator.createSocket();
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
             Log.i("DevelopLog", "JSONException");
             e.printStackTrace();
         }
-*/
+
         /////////////////////////////////////////////////////////////////////////////////
     }
 
