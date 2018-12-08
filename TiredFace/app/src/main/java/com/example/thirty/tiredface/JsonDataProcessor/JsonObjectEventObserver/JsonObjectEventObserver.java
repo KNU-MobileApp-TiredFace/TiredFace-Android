@@ -1,4 +1,4 @@
-package com.example.thirty.tiredface.JsonObjectEventObserver;
+package com.example.thirty.tiredface.JsonDataProcessor.JsonObjectEventObserver;
 
 import org.json.JSONObject;
 

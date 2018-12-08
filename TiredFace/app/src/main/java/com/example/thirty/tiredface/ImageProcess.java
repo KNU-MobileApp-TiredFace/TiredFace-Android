@@ -2,9 +2,13 @@ package com.example.thirty.tiredface;
 
 import android.util.Log;
 
-import com.example.thirty.tiredface.JsonDataSender.JsonDataSender;
-import com.example.thirty.tiredface.JsonSerializable.ImageSendingMessage;
-import com.example.thirty.tiredface.JsonSerializable.ToJsonSerializable;
+import com.example.thirty.tiredface.ImageBitmapUriConvert.ImageToGallery;
+import com.example.thirty.tiredface.JsonDataProcessor.JsonDataSender;
+import com.example.thirty.tiredface.JsonDataProcessor.JsonSerializable.ImageSendingMessage;
+import com.example.thirty.tiredface.JsonDataProcessor.JsonSerializable.ToJsonSerializable;
+import com.example.thirty.tiredface.JsonDataProcessor.TCPSocket.TCPDataWriter;
+import com.example.thirty.tiredface.JsonDataProcessor.TCPSocket.TCPJsonSocketReceiver;
+import com.example.thirty.tiredface.JsonDataProcessor.TCPSocket.TCPSocketCreator;
 
 import org.json.JSONException;
 import org.json.JSONObject;

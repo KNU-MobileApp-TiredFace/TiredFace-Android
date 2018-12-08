@@ -1,8 +1,8 @@
-package com.example.thirty.tiredface;
+package com.example.thirty.tiredface.JsonDataProcessor.TCPSocket;
 
 import android.util.Log;
 
-import com.example.thirty.tiredface.JsonDataSender.JsonDataSender;
+import com.example.thirty.tiredface.JsonDataProcessor.JsonDataSender;
 
 import org.json.JSONObject;
 

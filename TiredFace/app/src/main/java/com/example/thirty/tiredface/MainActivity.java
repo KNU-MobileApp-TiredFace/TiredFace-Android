@@ -14,9 +14,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.thirty.tiredface.JsonObjectEventObserver.JsonObjectEventObserver;
-import com.example.thirty.tiredface.UriToByteArrString.ImageUriToBase64ByteArrString;
-import com.example.thirty.tiredface.UriToByteArrString.UriToByteArrString;
+import com.example.thirty.tiredface.ImageBitmapUriConvert.BitmapToByteStringBase64;
+import com.example.thirty.tiredface.ImageBitmapUriConvert.ImageUriConverter;
+import com.example.thirty.tiredface.ImageBitmapUriConvert.UriToByteArrString;
+import com.example.thirty.tiredface.JsonDataProcessor.JsonObjectEventObserver.JsonObjectEventObserver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
         //갤러리에서 이미지를 골라옴
         if (requestCode == PICK_IMAGE) {
             Uri uri = data.getData();
-            UriToByteArrString uriToByteArrString = new ImageUriToBase64ByteArrString(getContentResolver());
+            UriToByteArrString uriToByteArrString = new ImageUriConverter(getContentResolver());
             encodedImage = uriToByteArrString.convert(uri);
             Log.i("DevelopLog", "encodedImage : " + encodedImage);
         } else if (requestCode == CAMERA_REQUEST) { //카메라로 사진을 찍어옴

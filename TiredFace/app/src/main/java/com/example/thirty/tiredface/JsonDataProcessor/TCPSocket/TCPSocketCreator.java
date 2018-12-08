@@ -1,4 +1,4 @@
-package com.example.thirty.tiredface;
+package com.example.thirty.tiredface.JsonDataProcessor.TCPSocket;
 
 import java.io.IOException;
 import java.net.ServerSocket;

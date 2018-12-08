@@ -1,4 +1,4 @@
-package com.example.thirty.tiredface.UriToByteArrString;
+package com.example.thirty.tiredface.ImageBitmapUriConvert;
 
 import android.net.Uri;
 

@@ -1,4 +1,4 @@
-package com.example.thirty.tiredface.JsonDataSender;
+package com.example.thirty.tiredface.JsonDataProcessor;
 
 import org.json.JSONObject;
 

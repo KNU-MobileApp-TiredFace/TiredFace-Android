@@ -1,4 +1,4 @@
-package com.example.thirty.tiredface.JsonSerializable;
+package com.example.thirty.tiredface.JsonDataProcessor.JsonSerializable;
 
 import org.json.JSONObject;
 
