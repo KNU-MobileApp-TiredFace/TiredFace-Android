@@ -74,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
         //갤러리에서 이미지를 골라옴
         if (requestCode == PICK_IMAGE) {
             Uri uri = data.getData();
-            UriToByteArrString uriToByteArrString = new ImageUriConverter(getContentResolver());
-            encodedImage = uriToByteArrString.convert(uri);
+            ImageUriConverter imageUriConverter = new ImageUriConverter(getContentResolver());
+            encodedImage = imageUriConverter.convert(uri);
+            ((ImageView) findViewById(R.id.imageView)).setImageBitmap(imageUriConverter.convertToBitmap(uri));
             Log.i("DevelopLog", "encodedImage : " + encodedImage);
         } else if (requestCode == CAMERA_REQUEST) { //카메라로 사진을 찍어옴
             Bitmap picture = (Bitmap) data.getParcelableExtra("data");
