@@ -170,6 +170,10 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
                 }
 
                 try {
+                    if(cattedLine.contains("b'"))
+                    {
+                        cattedLine = cattedLine.replace("b'","");
+                    }
                     receivedString = new JSONObject(cattedLine);
                 } catch (JSONException e) {
                     e.printStackTrace();

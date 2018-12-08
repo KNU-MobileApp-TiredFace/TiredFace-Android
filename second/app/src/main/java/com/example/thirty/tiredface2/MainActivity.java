@@ -59,9 +59,10 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-         /*******************************테스트 코드*******************************/
+        /*******************************테스트 코드*******************************/
+/*
         try {
             TCPSocketCreator testCreator = new TCPSocketCreator(Settings.SERVER_IP, Settings.SERVER_PORT);
             Socket socket = testCreator.createSocket();
@@ -69,15 +70,18 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
             JSONObject answer = testReceiver.waitForAnswer();
             String testCoded = answer.getString("image");
             new ImageToGallery().stringImageToGallery(testCoded);
-            byte [] encodeByte=Base64.decode(testCoded,Base64.DEFAULT);
+            byte[] encodeByte = Base64.decode(testCoded, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
             ((ImageView) findViewById(R.id.imageView)).setImageBitmap(bitmap);
         } catch (IOException e) {
+            Log.i("DevelopLog", "IOException");
             e.printStackTrace();
         } catch (JSONException e) {
+            Log.i("DevelopLog", "JSONException");
             e.printStackTrace();
         }
+*/
         /////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -95,17 +99,12 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
             UriToByteArrString uriToByteArrString = new ImageUriToBase64ByteArrString(getContentResolver());
             encodedImage = uriToByteArrString.convert(uri);
             Log.i("DevelopLog", "encodedImage : " + encodedImage);
-        }
-        else if(requestCode == CAMERA_REQUEST){ //카메라로 사진을 찍어옴
-            Bitmap picture = (Bitmap) data.getExtras().get("data");
-            File file = new File("file:///sdcard/", "photo.jpg");
-            Uri uri = Uri.fromFile(file);
-            ImageUriToBase64ByteArrString imageUriToBase64ByteArrString = new ImageUriToBase64ByteArrString(getContentResolver());
-            Bitmap photo = imageUriToBase64ByteArrString.convertToBitmap(uri);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        } else if (requestCode == CAMERA_REQUEST) { //카메라로 사진을 찍어옴
+            Bitmap picture = (Bitmap) data.getParcelableExtra("data");
+            ((ImageView) findViewById(R.id.imageView)).setImageBitmap(picture);
 
-            photo.compress(Bitmap.CompressFormat.JPEG,100,stream);
-            encodedImage = new String(stream.toByteArray());
+            BitmapToByteStringBase64 converter = new BitmapToByteStringBase64();
+            encodedImage = converter.convert(picture);
         }
     }
 
@@ -128,45 +127,18 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
         ImageProcess imageProcess = new ImageProcess();
         String resultImage = imageProcess.processImage(encodedImage);
 
-        byte [] encodeByte=Base64.decode(resultImage,Base64.DEFAULT);
+        byte[] encodeByte = Base64.decode(resultImage, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
         ((ImageView) findViewById(R.id.imageView)).setImageBitmap(bitmap);
     }
 
 
-    //작동 안됨
     //사진찍기 기능
     public void takePhoto(View v) throws IOException {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-        File photoFile = null;
-        photoFile = createImageFile();
-
-        Uri photoURI = FileProvider.getUriForFile(this,
-                "com.example.android.fileprovider",
-                photoFile);
-
-        //Uri photoURI = Uri.fromFile(photoFile);
-        //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-    }
-
-    //새로 찍은 사진을 위한 파일 생성
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        //mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+        }
     }
 }
