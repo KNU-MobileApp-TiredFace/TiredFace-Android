@@ -55,14 +55,7 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
     //일반소켓을 이용하여 응답 대기
     public JSONObject waitForAnswer() {
         listenSocket.start();
-        try {
-            listenSocket.join();
-            socket.close();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         return receivedString;
     }
 
@@ -146,10 +139,11 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
 
             try {
                 Log.i("DevelopLog", "Ready to read");
-
                 while (true) {
                     Log.i("DevelopLog", "Lets read");
                     char chbuf[] = new char[8192];
+                    if(!reader.ready())
+                        continue;
                     int size = reader.read(chbuf, 0, 8192);
                     String buf = new String(chbuf);
                     buf = buf.substring(0, size);
@@ -170,9 +164,8 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
                 }
 
                 try {
-                    if(cattedLine.contains("b'"))
-                    {
-                        cattedLine = cattedLine.replace("b'","");
+                    if (cattedLine.contains("b'")) {
+                        cattedLine = cattedLine.replace("b'", "");
                     }
                     receivedString = new JSONObject(cattedLine);
                 } catch (JSONException e) {
@@ -185,6 +178,7 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
                 Log.i("DevelopLog", "receving error");
                 e.printStackTrace();
             }
+            notifyObserver(receivedString);
         }
 
     };
