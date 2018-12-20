@@ -31,6 +31,7 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements JsonObjectEventObserver {
 
+    public static MainActivity reference;
     private final static int PICK_IMAGE = 1;
     private static final int CAMERA_REQUEST = 1888;
     private String encodedImage = null;
@@ -42,9 +43,10 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        reference = this;
 
         /*******************************테스트 코드*******************************/
-
+/*
         try {
             TCPSocketCreator testCreator = new TCPSocketCreator(Settings.SERVER_IP, Settings.SERVER_PORT);
             Socket socket = testCreator.createSocket();
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
             Log.i("DevelopLog", "JSONException");
             e.printStackTrace();
         }
-
+*/
         /////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -108,14 +110,9 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
     //Send 버튼 클릭 이벤트 처리 메소드
     public void sendButtonClicked(View v) throws JSONException {
         ImageProcess imageProcess = new ImageProcess();
-        String resultImage = imageProcess.processImage(encodedImage);
-
-        byte[] encodeByte = Base64.decode(resultImage, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-
-        ((ImageView) findViewById(R.id.imageView)).setImageBitmap(bitmap);
+        imageProcess.processImage(encodedImage);
+        toWaitingPage();
     }
-
 
     //사진찍기 기능
     public void takePhoto(View v) throws IOException {
@@ -123,5 +120,14 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, CAMERA_REQUEST);
         }
+    }
+
+    public void toWaitingButtonClicked(View v){
+        toWaitingPage();
+    }
+
+    public void toWaitingPage() {
+        Intent intent = new Intent(MainActivity.this,WaitingActivity.class);
+        startActivity(intent);
     }
 }

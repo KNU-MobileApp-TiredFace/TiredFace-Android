@@ -54,6 +54,14 @@
                 android:layout_weight="1"
                 android:text="Take new Picture"
                 android:onClick="takePhoto"/>
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="toWaitingPage"
+                android:onClick="toWaitingButtonClicked"/>
         </LinearLayout>
 
     </LinearLayout>

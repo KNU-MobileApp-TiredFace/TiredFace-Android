@@ -1,5 +1,6 @@
 package com.example.thirty.tiredface;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.example.thirty.tiredface.ImageBitmapUriConvert.ImageToGallery;
@@ -18,7 +19,9 @@ import java.net.Socket;
 
 //이미지를 받아서 전송하고 서버 응답을 받는 클래스
 public class ImageProcess {
-    public String processImage(String image){
+    public void processImage(String image){
+        MainActivity.reference.toWaitingPage();
+
         ToJsonSerializable jsonSerializable = new ImageSendingMessage(1, image, "base64");
         String jsonStr = ((ImageSendingMessage) jsonSerializable).toJsonString();
 
@@ -38,10 +41,13 @@ public class ImageProcess {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
         /***************************************서버로부터 답변 수신**********************************/
-        socketCreator = new TCPSocketCreator(Settings.SERVER_IP, Settings.SERVER_PORT);
+        /*socketCreator = new TCPSocketCreator(Settings.SERVER_IP, Settings.SERVER_PORT);
         Socket receiverSocket = socketCreator.createSocket();
 
         TCPJsonSocketReceiver receiver = null;
@@ -53,22 +59,23 @@ public class ImageProcess {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         //Json 데이터에서 이미지를 얻어옴
         //이 부분은 Json 형식이 정해지면 클래스화하도록 수정할 것
-        String receivedImage = null;
+        /*String receivedImage = null;
         try {
             receivedImage = receivedJson.getString("image");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+*/
         //테스트를 위해 받은 이미지를 저장
-        new ImageToGallery().stringImageToGallery(receivedImage);
+  /*      new ImageToGallery().stringImageToGallery(receivedImage);
         //new ImageToGallery().stringImageToGallery(image);
-
-        return receivedImage;
+*/
+        //return receivedImage;
     }
 
 
