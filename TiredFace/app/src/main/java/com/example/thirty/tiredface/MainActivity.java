@@ -69,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements JsonObjectEventOb
         /////////////////////////////////////////////////////////////////////////////////
     }
 
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        Log.i("DevelopLog","Main Activity Restarted");
+    }
+
 
     @Override
     public void update(JSONObject jsonObject) {

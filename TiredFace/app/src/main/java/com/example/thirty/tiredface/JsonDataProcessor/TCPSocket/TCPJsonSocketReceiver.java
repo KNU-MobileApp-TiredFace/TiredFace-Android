@@ -23,6 +23,7 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
     private BufferedReader reader;
     private ArrayList<JsonObjectEventObserver> observers;
     private JSONObject receivedString;
+    public static Socket listenerSocketStatic = null;
 
     //일반 소켓을 이용하도록 생성
     public TCPJsonSocketReceiver(Socket socket) throws IOException {
@@ -42,6 +43,7 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
         serverSocketListen.start();
         try {
             serverSocketListen.join();
+
             listeningServerSocket.close();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -53,10 +55,10 @@ public class TCPJsonSocketReceiver implements JsonObjectEventSubject {
     }
 
     //일반소켓을 이용하여 응답 대기
-    public JSONObject waitForAnswer() {
+    public Thread waitForAnswer() {
         listenSocket.start();
 
-        return receivedString;
+        return listenSocket;
     }
 
     //관찰자 등록
