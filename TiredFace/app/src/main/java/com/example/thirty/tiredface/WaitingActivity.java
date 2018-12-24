@@ -23,9 +23,14 @@ import java.net.Socket;
 public class WaitingActivity extends AppCompatActivity implements JsonObjectEventObserver {
     Socket receiverSocket = null;
     boolean finishedJob = false;
+    public static WaitingActivity w_activity = null;
+    private Thread basterThread = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        w_activity = this;
         setContentView(R.layout.activity_waiting);
         /***************************************서버로부터 답변 수신**********************************/
         TCPSocketCreator socketCreator = new TCPSocketCreator(Settings.SERVER_IP, Settings.SERVER_PORT);
@@ -36,7 +41,7 @@ public class WaitingActivity extends AppCompatActivity implements JsonObjectEven
         try {
             receiver = new TCPJsonSocketReceiver(receiverSocket);
             receiver.registerObserver(this);
-            receiver.waitForAnswer();
+            basterThread = receiver.waitForAnswer();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,29 +49,38 @@ public class WaitingActivity extends AppCompatActivity implements JsonObjectEven
     }
 
     @Override
-    public void onRestart() {
-        Log.i("DevelopLog","WaitingActivity Restarted");
-        super.onRestart();
-        finish();
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("minkuk","finish 사망 ");
+        try {
+            basterThread.join();
+            Log.i("minkuk","basterThread 주금 사망 ");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void toResultPage(String imageString) {
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        Log.i("DevelopLog","WaitingActivity Restarted");
+
+
+        //finish();
+    }
+
+    private void toResultPage(String imageString, double tiredPercentage) {
         Intent intent = new Intent(WaitingActivity.this,ResultActivity.class);
         intent.putExtra("image",imageString);
+        intent.putExtra("tiredPercentage",tiredPercentage);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
         startActivity(intent);
-        //finish();
+        this.finish();
     }
 
     @Override
     public void update(JSONObject jsonObject) {
-        /***************************테스트용 코드*************************/
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        /////////////////////////////////////////////////////////////////
-
         try {
             receiverSocket.close();
         } catch (IOException e) {
@@ -75,16 +89,22 @@ public class WaitingActivity extends AppCompatActivity implements JsonObjectEven
 
         //Json 데이터에서 이미지를 얻어옴
         String receivedImage = null;
+        double tiredPercentage = 0;
         try {
             receivedImage = jsonObject.getString("image");
+            tiredPercentage = jsonObject.getDouble("TiredScore");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
         //테스트를 위해 받은 이미지를 저장
         new ImageToGallery().stringImageToGallery(receivedImage);
         //new ImageToGallery().stringImageToGallery(image);
         finishedJob = true;
-        toResultPage(receivedImage);
+        toResultPage(receivedImage,tiredPercentage);
+
+
     }
 }

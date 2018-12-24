@@ -1,5 +1,7 @@
 package com.example.thirty.tiredface.JsonDataProcessor.TCPSocket;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,6 +23,7 @@ public class TCPSocketCreator {
         socketCreatorThread.start();
         try {
             socketCreatorThread.join();
+            Log.i("minkuk","일반 쓰레드 사망 ");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -67,6 +70,7 @@ public class TCPSocketCreator {
         public void run() {
             try {
                 setServerSocket(ip,port);
+
             } catch (Exception e) {
 
             }
